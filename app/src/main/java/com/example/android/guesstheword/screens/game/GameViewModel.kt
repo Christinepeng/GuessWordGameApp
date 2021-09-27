@@ -21,22 +21,19 @@ import android.text.format.DateUtils
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 
 class GameViewModel : ViewModel() {
 
     companion object {
         // These represent different important times in the game, such as game length.
-
         // This is when the game is over
         private const val DONE = 0L
-
         // This is the number of milliseconds in a second
         private const val ONE_SECOND = 1000L
-
         // This is the total time of the game
         private const val COUNTDOWN_TIME = 60000L
-
     }
 
     private val timer: CountDownTimer
@@ -44,6 +41,10 @@ class GameViewModel : ViewModel() {
     private val _currentTime = MutableLiveData<Long>()
     val currentTime: LiveData<Long>
         get() = _currentTime
+
+    val currentTimeString = Transformations.map(currentTime) { time ->
+        DateUtils.formatElapsedTime(time)
+    }
 
     // The current word
     private val _word = MutableLiveData<String>()
